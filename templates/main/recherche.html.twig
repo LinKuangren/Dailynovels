@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche Avancée{% endblock %}
+{% block meta_description %}Page de recherche avancée où vous pouvez retrouver les novels qui sont à votre gout.{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+    <h1>Recherche avancée</h1>
+    <div class="form-title">
+        {{ form_start(form) }}
+        <div class="form">
+            <div class="search_label">
+                {{ form_label(form.Categories) }}
+            </div>
+            <div class="categories-grid">
+                {% for child in form.Categories %}
+                    <div class="category-item">
+                        {{ form_widget(child) }}
+                        {{ form_label(child) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-flex">
+            <div class="form form-tag">
+                <div class="search_label">
+                    {{ form_label(form.Tags, 'Tags à inclure') }}
+                </div>
+                {{ form_widget(form.Tags, { 'attr': {'class': 'form-all select-tags-search'}}) }}
+            </div>
+            <div class="form">
+                <div class="search_label">
+                    {{ form_label(form.TagsExcluded, 'Tags à exclure') }}
+                </div>
+                {{ form_widget(form.TagsExcluded, { 'attr': {'class': 'form-all select-tags-search'}}) }}
+            </div>
+        </div>
+        <div class="form space-tags">
+            <div class="search_label">
+                {{ form_label(form.statut) }}
+            </div>
+            {{ form_widget(form.statut, { 'attr': {'class': 'form-all'}}) }}
+        </div>
+        <div class="form">
+            <div class="search_label">
+                {{ form_label(form.orderBy) }}
+            </div>
+            {{ form_widget(form.orderBy, { 'attr': {'class': 'form-all'}}) }}
+        </div>
+        <div class="valider">
+            {{ form_label(form.Valider) }}
+            {{ form_widget(form.Valider, { 'attr': {'class': 'button-valider'} }) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+    {% if pagination is not empty %}
+    <div class="results-section">
+        <h2>Résultats de la recherche</h2>
+        {{ knp_pagination_render(pagination) }}
+        {% for novel in pagination %}
+            <div class="classement-interligne classement-top">
+                    <div class="classement-image">
+                        <a href="{{ path('show', {title: novel.title}) }}">
+                            <img src="{{ vich_uploader_asset(novel, 'imageFile') }}" alt="{{ novel.imageName }}">
+                        </a>
+                    </div>
+                    <div class="classement-espace">
+                        <div class="classement-top n-classement classement-space">
+                            <a href="{{ path('show', {title: novel.title}) }}"><h2>N°{{ loop.index }} {{ novel.title }}</h2></a>
+                            <p>{{ novel.average |number_format(2, '.', ',') }} / 5</p>
+                        </div>
+                        <div class="classement-top classement-actu">
+                            <p>Chapitres: {{ novel.chapitres.count() }}</p>
+                            <p>Favoris: {{ novel.favoris.count() }}</p>
+                            <p>Commentaires: {{ novel.comments.count() }}</p>
+                        </div>
+                        <div class="classement-top tag-wrap n-classement">
+                            {% for categorie in novel.categories %}
+                                <a href="{{ path('categories_show', {'name': categorie.name}) }}">
+                                    <p class="catetag">{{ categorie.name }}</p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <div class="description">
+                            <p id="description-{{ loop.index }}" class="full-description" style="display: none;">{{ novel.description|nl2br }}</p>
+                            <p id="partial-description-{{ loop.index }}" class="partial-description">
+                                {{ novel.description | slice(0, 200) |nl2br }}
+                                {% if novel.description | length > 200 %}
+                                    <strong>...</strong>
+                                {% endif %}
+                            </p>
+                            {% if novel.description | length > 200 %}
+                                <a href="#" class="read-more-link" data-description-id="{{ loop.index }}">Suite >></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        {{ knp_pagination_render(pagination) }}
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block Javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(function(){
+            $('.select-tags-search').select2();
+        })
+    </script>
+{% endblock %}

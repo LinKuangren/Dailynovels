@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une categorie{% endblock %}
+
+{% block body %}
+        <h1>Ajouter une categorie</h1>
+        <div class="form-title">
+            {{ form_start(form) }}
+                <div class="form">
+                    {{ form_label(form.name, "Titre") }}
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-all title-block'} }) }}
+                </div>
+                <div class="form">
+                    {{ form_row(form._token) }}
+                </div>
+                <div class="valider">
+                    {{ form_label(form.Valider) }}
+                    {{ form_widget(form.Valider, { 'attr': {'class': 'button-valider'} }) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="error-inscription">
+        {{ form_errors(form, {'attr': {'class': 'alert alert-warning'}}) }}
+    </div>
+	<div class="container">
+        {% for message in app.flashes('success_inscription') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+		<h1 class="mt-4">Formulaire d'inscription</h1>
+        {{ form_start(form) }}
+        <div class="form-title">
+            <div class="form">
+                {{ form_label(form.email, "Email") }}
+                {{ form_widget(form.email, { 'attr': {'class': 'form-all title-block'} }) }}
+            </div>
+            <div class="form">
+                {{ form_label(form.pseudo, "Pseudo") }}
+                {{ form_widget(form.pseudo, { 'attr': {'class': 'form-all title-block'} }) }}
+            </div>
+            <div class="illustration-form">
+                {{ form_label(form.imageFile, "Illustration") }}
+                {{ form_widget(form.imageFile, { 'attr': {'class': 'description-block form-all'}}) }}
+            </div>
+            <div class="form">
+                {{ form_label(form.plainPassword.first, "Mot de passe") }}
+                {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control form-all'} }) }}
+            </div>
+            <div class="form">
+                {{ form_label(form.plainPassword.second, "Confirmation du mot de passe") }}
+                {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control form-all'} }) }}
+            </div>
+            <div class="check-rgpd">
+                {{ form_widget(form.rgpd, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_label(form.rgpd) }}
+            </div>
+            <div class="valider">
+                {{ form_label(form.Valider) }}
+                {{ form_widget(form.Valider, { 'attr': {'class': 'button-valider'} }) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+        <div>
+            <div class="stage">
+                <a href="{{ path('google_connect', {service: 'google'})}}" class="ui button google-auth__button"><i class="fa-brands fa-google fa-xl google-auth__logo"></i> Se connecter avec Google</a>
+            </div>
+        </div>
+	</div>
+{% endblock %}

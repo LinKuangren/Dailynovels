@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur500{% endblock %}
+{% block meta_description %}Oups tu tes perdu, c'est pas si mal.{% endblock %}
+
+{% block body %}
+    <div class="erreur404">
+        <h3>ERROR</h3>
+        <h1>500</h1>
+        <p>Oups tu tes perdu, c'est pas si mal.</p>
+        <div class="err-bouton">
+            <a class="boutona" href="{{ path('accueil') }}"> <span>Accueil</span></a>
+        </div>
+    </div>
+{% endblock %}

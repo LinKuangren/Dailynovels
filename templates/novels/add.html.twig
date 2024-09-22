@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une novel{% endblock %}
+{% block meta_description %}Ajout de novel sur le site, si tu vois ceci j'ai codé comme de la merde.{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+        <h1> Ajouter une novel</h1>
+        <div class="form-title">
+            {{ form_start(form) }}
+                <div class="form">
+                    {{ form_label(form.title, "Titre") }}
+                    {{ form_widget(form.title, { 'attr': {'class': 'form-all title-block'} }) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.imageFile, "Illustration") }}
+                    {{ form_widget(form.imageFile, { 'attr': {'class': 'form-all'}}) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.description, "Description") }}
+                    {{ form_widget(form.description, { 'attr': {'class': 'form-all'}}) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.traducteurs, "Traducteurs") }}
+                    {{ form_widget(form.traducteurs, { 'attr': {'class': 'form-all'}}) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.author, "Author") }}
+                    {{ form_widget(form.author, { 'attr': {'class': 'form-all'}}) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.categories) }}
+                    {{ form_widget(form.categories, { 'attr': {'class': 'form-all form-title-categories'} }) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.tags) }}
+                    {{ form_widget(form.tags, { 'attr': {'class': 'form-all select-tags'}}) }}
+                </div>
+                <div class="form space-tags">
+                    {{ form_label(form.statut) }}
+                    {{ form_widget(form.statut, { 'attr': {'class': 'form-all'}}) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.visibilitie) }}
+                    {{ form_widget(form.visibilitie, { 'attr': {'class': 'form-all visibilitie'}}) }}
+                </div>
+                <div class="valider">
+                    {{ form_label(form.Valider) }}
+                    {{ form_widget(form.Valider, { 'attr': {'class': 'button-valider'} }) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+{% endblock %}
+
+{% block Javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(function(){
+            $('.select-tags').select2();
+        })
+    </script>
+{% endblock %}

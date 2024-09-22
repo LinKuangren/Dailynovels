@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    <h1>Connexion</h1>
+    <div class="form-title">
+        <form action="{{ path('security_login') }}" method="post" name="login">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}
+            <div class="form">
+                <label for="username">Email:</label>
+                <input type="text" id="username" name="_username" class="form-all" value="{{ last_username }}" placeholder="azerty@exemple.com">
+            </div>
+            <div class="form">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="_password" class="form-all" placeholder="********">
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <div class="valider">
+                <button type="submit" class="button-valider">login</button>
+            </div>
+        </form>
+        <div class="mdpOub">
+            <a href="{{path('app_forgot_password_request')}}">Mot de passe oublié</a>
+        </div>
+        <div>
+            <div class="stage">
+                <a href="{{ path('google_connect', {service: 'google'})}}" class="ui button google-auth__button"><i class="fa-brands fa-google fa-xl google-auth__logo"></i> Se connecter avec Google</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

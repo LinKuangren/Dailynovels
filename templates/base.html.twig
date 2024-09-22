@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Comatible" content="ie=edge">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}Description par défaut de votre site{% endblock %}">
+        <link rel="icon" type="image/png" href="{{ asset('images/favicon.svg') }}">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/variable.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{{ asset('js/script.js') }}"></script>
+        <script src="https://kit.fontawesome.com/2f9a7f15c2.js" crossorigin="anonymous"></script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3422509972786228" crossorigin="anonymous"></script>
+        {% block stylesheets %}{% endblock %}
+        <!-- Matomo -->
+        <script>
+            var _paq = window._paq = window._paq || [];
+            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function() {
+                var u="//localhost/matomo/";
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', '2']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+            })();
+        </script>
+        <!-- End Matomo Code -->
+    </head>
+    <body>
+        {{ include('_header.html.twig') }}
+        <div class="body">
+                {% block body %}{% endblock %}
+        </div>
+        <div class="back-don">
+            <p>Si vous voulez soutenir notre site</p>
+            <a href="{{ path('accueil') }}">Faire un Don</a>
+        </div>
+        {{ include('_footer.html.twig') }}
+        {% block Javascript %}{% endblock %}
+    </body>
+</html>

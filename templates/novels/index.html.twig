@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Novels{% endblock %}
+{% block meta_description %}Page de toutes les novels qui se trouve sur le site.{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <h1> Toutes les novels</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="presentation-bouton">
+            <div class="d-bouton">
+                <a class="boutona" href="{{ path('novels_ajout') }}"> <span>Ajouter une novel</span></a>
+            </div>
+            <div class="d-bouton">
+                <a class="boutona" href="{{ path('chapitres_ajout') }}"> <span>Ajouter un chapitre</span></a>
+            </div>
+        </div>
+    {% endif %}
+    <ul class="alphabet">
+        {% for letter in range('A', 'Z') %}
+            <a href="{{ path('novels_index_alphabetical', {'letter': letter}) }}">{{ letter }}</a>
+        {% endfor %}
+    </ul>
+    <div class="">
+        {{ knp_pagination_render(novels) }}
+    </div>
+    <div class="all-novels">
+        {% for novel in novels %}
+            <div class="novel-pages">
+                <div class="images-novels-pages">
+                    <a href="{{ path('show', {title: novel.title}) }}">
+                        <img src="{{ vich_uploader_asset(novel, 'imageFile') }}" alt="{{ novel.imageName }}">
+                    </a>
+                </div>
+                <h4>{{novel.title}}</h4>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="cta-delit">
+                        <a href="{{ path('novels_delete', {id: novel.id}) }}" class="delete delit-novel" data-confirm="Êtes-vous sûr de vouloir supprimer cette novel ?">Supprimer</a>
+                        <a href="{{ path('novels_modifier', {title: novel.title}) }}" class="edit delit-novel">Modifier</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div>
+        {{ knp_pagination_render(novels) }}
+    </div>
+    <ul class="alphabet">
+        {% for letter in range('A', 'Z') %}
+            <a href="{{ path('novels_index_alphabetical', {'letter': letter}) }}">{{ letter }}</a>
+        {% endfor %}
+    </ul>
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p id="confirmation-message"></p>
+            <div class="model-button">
+                <button id="cancel-button">Annuler</button>
+                <button id="confirm-button">Confirmer</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

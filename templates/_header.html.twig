@@ -1,0 +1,65 @@
+<header id="main-header">
+    <div class="header">
+        <div class="flex">
+            <input type="checkbox" id="check">
+            <label for="check" class="checkbtn"><i for="check" class="fa-solid fa-bars checkbtn"></i></label>
+            <div class="logo_site">
+                <a href="{{ path('accueil') }}">
+                    <img src="{{ asset('images/logo-blanc.png') }}" alt="logo_site" class="img-header">
+                </a>
+            </div>
+                <div class="navigation">
+                    <nav>
+                        <a href="{{ path('presentation') }}">Presentation</a>
+                        <a href="{{ path('novels') }}">Novels</a>
+                        <a href="{{ path('classement') }}">Classements</a>
+                        <a href="{{ path('traducteurs') }}">Traducteurs</a>
+                    </nav>
+                    <div class="header-search-left">
+                        <a class="search-plus-left" href="{{ path('search') }}">Recherche avancée</a>
+                    </div>
+                </div>
+        </div>
+        <div class="header-right">
+            <div class="header-search">
+                <a class="search-plus" href="{{ path('search') }}">Recherche avancée</a>
+            </div>
+            {% if app.user is not null %}
+                <!-- Utilisateur connecté -->
+                <div class="user-profile">
+                    <div class="profile-header">
+                        <img src="{{ vich_uploader_asset(app.user, 'imageFile') }}" alt="{{ app.user.imageName }}" class="profile-picture" id="profile-picture">
+                    </div>
+                    <div class="profile-menu" id="profile-menu">
+                        <ul>
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                <!-- Menu pour les administrateurs -->
+                                <li><a href="{{ path('all_user') }}">Dashboard</a></li>
+                            {% endif %}
+                            <li><a href="{{ path('profil', {'pseudo': app.user.getPseudo() }) }}">Informations</a></li>
+                            <li><a href="{{ path('favoris', {'pseudo': app.user.getPseudo() }) }}">Favoris</a></li>
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                <!-- Menu pour les administrateurs -->
+                                <li><a href="{{ path('annonces') }}">Annonces</a></li>
+                                <li><a href="{{ path('novels') }}">Novels</a></li>
+                                <li><a href="{{ path('categories') }}">Catégories</a></li>
+                                <li><a href="{{ path('tags') }}">Tags</a></li>
+                                <li><a href="{{ path('traducteurs') }}">Traducteurs</a></li>
+                                <li><a href="{{ path('chapitres_ajout') }}">Ajout Chapitre</a></li>
+                                {# <li><a href="{{ path('app_scrape') }}">Lancer le scraping</a></li> #}
+                            {% endif %}
+                            <li><a href="{{ path('security_logout') }}">Déconnexion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Boutons de connexion et d'inscription -->
+                <div class="profile-menu-2">
+                    <a href="{{ path('security_login') }}">Connexion</a>
+                    <span class="separator">|</span>
+                    <a href="{{ path('security_registration') }}">Inscription</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</header>

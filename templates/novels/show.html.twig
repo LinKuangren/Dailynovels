@@ -1,0 +1,204 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ novel.title }}{% endblock %}
+{% block meta_description %}{{novel.description}}{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="novel-title">
+        <div class="images-novels-show">
+            <img src="{{ vich_uploader_asset(novel, 'imageFile') }}" alt="{{ novel.imageName }}">
+        </div>
+        <div class="title-detail">
+            <div class="flex-rating rating-space">
+                <h1>{{novel.title}}</h1>
+                <div class="flex-ratings">
+                    {% if app.user is not null %}
+                    {{ form_start(form) }}
+                        {% set ratingField = form_widget(form.rating) %}
+                        {% for star in range(1, 5) %}
+                                <input type="radio" id="star{{ star }}" name="{{ form.rating.vars.full_name }}" value="{{ star }}" {{ ratingField }}>
+                            
+                            <label for="star{{ star }}" class="star-label" data-star="{{ star }}"><i class="fa-regular fa-star"></i></label>
+                        {% endfor %}
+                    {{ form_end(form) }}
+                    {% else %}
+                        <a href="{{ path('security_login') }}" class="favoris-cta">Voter</a>
+                    {% endif %}
+                    <p>{{ novel.average |number_format(2, '.', ',') }} / 5</p>
+                </div>
+            </div>
+            <div class="getnumber">
+                <div class="show-icon-nov">
+                    <i class="fa-solid fa-bookmark"></i>
+                    <p>Favoris: {{ novel.getNumberOfFavorites() }}</p>
+                </div>
+                <div class="show-icon-nov">
+                    <i class="fa-solid fa-scroll"></i>
+                    <p>Chapitres: {{ novel.getNumberOfChapitres() }}</p>
+                </div>
+                <div class="show-icon-nov">
+                    <i class="fa-solid fa-comment"></i>
+                    <p>Commentaires: {{ novel.getNumberOfComments() }}</p>
+                </div>
+            </div>
+            <div class="trador">
+                {% if novel.traducteurs is not empty %}
+                    <div class="trador-margin">
+                        <h2>Traducteurs :</h2>
+                        <a href="{{ path('traducteurs_show', {id: novel.traducteurs.id}) }}">
+                            <p>{{novel.traducteurs.name}}</p>
+                        </a>
+                    </div>
+                {% endif %}
+                {% if novel.author is not empty %}
+                    <div class="trador-margin">
+                        <h2>Auteur :</h2>
+                        <p>{{novel.author}}</p>
+                    </div>
+                {% endif %}
+                {% if novel.statut is not empty %}
+                    <div class="trador-margin">
+                        <h2>Statut :</h2>
+                        <p>{{novel.statut}}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if app.user is not null %}
+        <div class="favoris-cta-block">
+            {% if app.user.getFavoris().contains(novel) %}
+                <a href="{{ path('add_favoris', {id: novel.id}) }}" class="favoris-cta-del">
+                    Retirer des Favoris
+                </a>
+            {% else %}
+                <a href="{{ path('add_favoris', {id: novel.id}) }}" class="favoris-cta">
+                    Ajouter aux Favoris
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="favoris-cta-block">
+            <a href="{{ path('security_login') }}" class="favoris-cta">Ajouter aux Favoris</a>
+        </div>
+    {% endif %}
+    <div>
+        <h2>Synopsis</h2>
+        <p class="synopsis">{{novel.description |nl2br}}</p>
+    </div>
+    {% if novel.categories is not empty %}
+        <div>
+            <h2>Categories :</h2>
+            <div class="catetag-order">
+                {% for categorie in novel.categories %}
+                    <a href="{{ path('categories_show', {'name': categorie.name}) }}">
+                        <p class="catetag">{{ categorie.name }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if novel.tags is not empty %}
+        <div>
+            <h2>Tags :</h2>
+            <div class="catetag-order">
+            {% for tag in novel.tags %}
+                <a href="{{ path('tags_show', {'name': tag.name}) }}">
+                    <p class="catetag">{{ tag.name }}</p>
+                </a>
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if novel.chapitres is not empty %}
+        <div class="last-add-title">
+            <h2>Chapitres :</h2>
+            <div class="order-chap-btn">
+                {% if app.request.query.get('sortOrder') == 'ASC' %}
+                    <a href="{{ path('show', {'title': novel.title, 'sortOrder': 'DESC'}) }}"><i class="fa-solid arrow-order fa-xl fa-arrow-down-short-wide"></i></a>
+                {% else %}
+                    <a href="{{ path('show', {'title': novel.title, 'sortOrder': 'ASC'}) }}"><i class="fa-solid arrow-order fa-xl fa-arrow-up-wide-short"></i></a>
+                {% endif %}
+            </div>
+        </div>
+        {{ knp_pagination_render(pagination) }}
+        <ul class="order-chap">
+            {% set chapterCounter = (pagination.currentPageNumber - 1) * pagination.getItemNumberPerPage() %}
+            {% for chapitre in pagination %}
+                <div class="chap-novel">
+                    <a href="{{ chapitre.link }}" class="chap-link">
+                        <p>{{ chapitre.name }}</p>
+                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="chap-delup">
+                            <a href="{{ path('chapitres_delete', {id: chapitre.id}) }}" class="cta-chap chap-delete" data-confirm="Êtes-vous sûr de vouloir supprimer ce chapitre ?">Supprimer</a>
+                            <a href="{{ path('chapitres_modifier', {id: chapitre.id}) }}" class="cta-chap chap-edit">modifier</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </ul>
+        {{ knp_pagination_render(pagination) }}
+    {% endif %}
+    {% if app.user is not null %}
+        <div class="comment-publish">
+            {{ form_start(commentForm) }}
+            <div class="form">
+                {{ form_label(commentForm.content, "Ton commentaire") }}
+                {{ form_widget(commentForm.content, { 'attr': {'class': 'form-all title-block'} }) }}
+            </div>
+            <div class="valider">
+                {{ form_label(commentForm.Publier, "Publier") }}
+                {{ form_widget(commentForm.Publier, { 'attr': {'class': 'comment-push'} }) }}
+            </div>
+            {{ form_end(commentForm) }}
+        </div>
+    {% endif %}
+    <div>
+        <h2>{{ novel.getNumberOfComments() }} Commentaires :</h2>
+        {% if comments is not empty %}
+            {% for comment in comments %}
+                <div class="show-comments">
+                    <div class="comment-imgpseudo">
+                        <img src="{{ vich_uploader_asset(comment.user, 'imageFile') }}" alt="{{ comment.user.imageName }}" class="profile-comment">
+                        <h3>{{ comment.user.pseudo }}</h3>
+                    </div>
+                    <p>{{ comment.content |nl2br }}</p>
+                    <div class="legend-date">
+                        <p>Créer le :</p> 
+                        <em>{{ comment.CreatedAt |date('d-m-Y H:i:s') }}</em>
+                    </div>
+                    {% if is_granted('ROLE_ADMIN') or ( app.user and app.user.id == comment.user.id) %}
+                        <div class="delete-comment">
+                            <a class="chap-delete cta-chap" data-confirm="Êtes-vous sûr de vouloir supprimer ce commentaire ?" href="{{ path('delete_comment', {id: comment.id}) }}">Supprimer</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="not-comment">
+                <p>Il n'y a pas encore de commentaire.</p>
+            </div>
+        {% endif %}
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="chap-delup chap-separ">
+            <a href="{{ path('novels_delete', {id: novel.id}) }}" class="cta-chap chap-delete" data-confirm="Êtes-vous sûr de vouloir supprimer cette novel ?">Supprimer</a>
+            <a href="{{ path('novels_modifier', {title: novel.title}) }}" class="cta-chap chap-edit">modifier</a>
+        </div>
+    {% endif %}
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p id="confirmation-message"></p>
+            <div class="model-button">
+                <button id="cancel-button">Annuler</button>
+                <button id="confirm-button">Confirmer</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

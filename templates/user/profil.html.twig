@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+{% block meta_description %}Page de profil de l'utilisateur de toute façon ce texte est inutile ici tu peux pas l'atteindre sans être connecter.{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('warning_mdp') %}
+		<div class="alert alert-warning">
+			{{ message }}
+		</div>
+	{% endfor %}
+    {% for message in app.flashes('Error_inscription') %}
+		<div class="alert alert-warning">
+			{{ message }}
+		</div>
+	{% endfor %}
+    {% for message in app.flashes('success_img') %}
+		<div class="alert alert-success">
+			{{ message }}
+		</div>
+	{% endfor %}
+    {% for message in app.flashes('success_mdp') %}
+		<div class="alert alert-success">
+			{{ message }}
+		</div>
+	{% endfor %}
+    <div class="flex-favoris presentation-bouton">
+        <a href="{{ path('profil', {'pseudo': app.user.getPseudo() }) }}" class="boutona profil-boutona">Informations</a>
+        <a href="{{ path('favoris', {'pseudo': app.user.getPseudo() }) }}" class="boutona profil-boutona" >favoris</a>
+        <a href="{{ path('security_logout') }}" class="boutona profil-boutona">Déconnexion</a>
+    </div>
+    <h1 class="title-profil">Profil</h1>
+    <div class="form-title">
+        <h2>Modifier la photo de profil</h2>
+        {{ form_start(formImage) }}
+            <div class="form">
+                {{ form_widget(formImage.imageFile, { 'attr': {'class': 'form-all title-block'} }) }}
+                <div class="image-container-profil">
+                    <img src="{{ vich_uploader_asset(formImage.vars.data, 'imageFile') }}" alt="{{ app.user.imageName }}">
+                </div>
+            </div>
+            <div class="valider">
+                {{ form_label(formImage.submit) }}
+                {{ form_widget(formImage.submit, { 'attr': {'class': 'button-valider'} }) }}
+            </div>
+        {{ form_end(formImage) }}
+    </div>
+    <div class="form-title">
+        <h2>Modifier le mot de passe</h2>
+        {{ form_start(formPassword) }}
+            <div class="form">
+                {{ form_label(formPassword.password, "Mot de passe") }}
+                {{ form_widget(formPassword.password, { 'attr': {'class': 'form-all title-block'} }) }}
+            </div>
+            <div class="form">
+                {{ form_label(formPassword.plainPassword.first, "Nouveau mot de passe") }}
+                {{ form_widget(formPassword.plainPassword.first, { 'attr': {'class': 'form-all title-block'} }) }}
+            </div>
+            <div class="form">
+                {{ form_label(formPassword.plainPassword.second, "Confirmation du nouveau mot de passe") }}
+                {{ form_widget(formPassword.plainPassword.second, { 'attr': {'class': 'form-all title-block'} }) }}
+            </div>
+            <div class="valider">
+                {{ form_label(formPassword.submit) }}
+                {{ form_widget(formPassword.submit, { 'attr': {'class': 'button-valider'} }) }}
+            </div>
+        {{ form_end(formPassword) }}
+    </div>
+{% endblock %}

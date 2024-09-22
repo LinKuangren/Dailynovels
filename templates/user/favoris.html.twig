@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Favoris{% endblock %}
+{% block meta_description %}Page des favoris de l'utilisateur de toute façon ce texte est inutile ici tu peux pas l'atteindre sans être connecter.{% endblock %}
+
+{% block body %}
+    <div class="flex-favoris presentation-bouton">
+        <a href="{{ path('profil', {'pseudo': app.user.getPseudo() }) }}" class="boutona profil-boutona">Informations</a>
+        <a href="{{ path('favoris', {'pseudo': app.user.getPseudo() }) }}" class="boutona profil-boutona" >favoris</a>
+        <a href="{{ path('security_logout') }}" class="boutona profil-boutona">Déconnexion</a>
+    </div>
+    <h1>Favoris</h1>
+    <div class="all-novels">
+        {% for favori in user.favoris %}
+            <div class="novel-pages">
+                <div class="images-novels-favoris">
+                    <a href="{{ path('show', {title: favori.title}) }}">
+                        <img src="{{ vich_uploader_asset(favori, 'imageFile') }}" alt="{{ favori.imageName }}">
+                    </a>
+                </div>
+                <h4 class="">{{ favori.title }}</h4>
+                <a href="{{ path('remove_favoris_user', {id: favori.id}) }}" class="favoris-cta-novels">
+                    {% if app.user.getFavoris().contains(favori) %}
+                        Retirer des Favoris
+                    {% endif %}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

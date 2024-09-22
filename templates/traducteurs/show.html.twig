@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ traducteur.name }}{% endblock %}
+{% block meta_description %}Toute les informations sur {{ traducteur.name }} et les novels qu'ils ont traduis.{% endblock %}
+
+{% block body %}
+    <a href="{{ traducteur.link }}" class="title-traducteurs">{{traducteur.name}}</a>
+    <small class="small-trad">
+        Vous pouvez aller sur leur site en cliquant sur le titre ci-dessus.
+    </small>
+    {% if traducteur.novels is not empty %}
+        <h2>Novels traduites :</h2>
+        <div class="all-novels">
+            {% for novel in traducteur.novels %}
+                <div class="novel-pages">
+                    <div class="images-novels-pages">
+                        <a href="{{ path('show', {title: novel.title}) }}">
+                            <img src="{{ vich_uploader_asset(novel, 'imageFile') }}" alt="{{ novel.imageName }}">
+                        </a>
+                    </div>
+                    <h4>{{novel.title}}</h4>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

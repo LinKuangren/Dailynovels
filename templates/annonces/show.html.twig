@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ annonce.title }}{% endblock %}
+{% block meta_description %}{{ annonce.content }}{% endblock %}
+
+{% block body %}
+    <h1>{{annonce.title}}</h1>
+    <p class="synopsis">{{annonce.content |nl2br}}</p>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="chap-delup chap-separ">
+            <a href="{{ path('annonces_delete', {id: annonce.id}) }}" class="cta-chap chap-delete" data-confirm="Êtes-vous sûr de vouloir supprimer cette annonce ?">Supprimer</a>
+            <a href="{{ path('annonces_modifier', {id: annonce.id}) }}" class="cta-chap chap-edit">modifier</a>
+        </div>
+    {% endif %}
+{% endblock %}

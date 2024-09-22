@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les Traducteurs{% endblock %}
+{% block meta_description %}Page des tags ou on peux retrouver tout les tags.{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="example-wrapper">
+        <h1>{{ controller_name }}</h1>
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="presentation-bouton">
+            <div class=d-bouton>
+                <a class="boutona" href="{{ path('traducteurs_ajout') }}"> <span>Ajouter un traducteur</span></a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="">
+        {{ knp_pagination_render(traducteurs) }}
+    </div>
+    <div class="all-all">
+        {% for traducteur in traducteurs %}
+            <div class="all">
+                <a class="all-trad" href="{{ path('traducteurs_show', {id: traducteur.id}) }}">
+                    <p>{{traducteur.name}}</p>
+                    <small class="trad-small">Novels: {{ traducteur.getNumberOfTraducteurs() }}</small>
+                </a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="cta-delit">
+                        <a href="{{ path('traducteurs_delete', {id: traducteur.id}) }}" class="btn btn-danger delete" data-confirm="Êtes-vous sûr de vouloir supprimer ce traducteur ?">Supprimer</a>
+                        <a href="{{ path('traducteurs_modifier', {id: traducteur.id}) }}" class="edit">modifier</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="">
+        {{ knp_pagination_render(traducteurs) }}
+    </div>
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p id="confirmation-message"></p>
+            <div class="model-button">
+                <button id="cancel-button">Annuler</button>
+                <button id="confirm-button">Confirmer</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

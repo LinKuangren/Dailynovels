@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+{% block meta_description %}Page dde contact du site.{% endblock %}
+
+{% block body %}
+    <h1>Contact</h1>
+    <div class="form-title">
+        {% for message in app.flashes('success') %}
+            <div class="alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert-warning">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {{ form_start(form) }}
+            <div class="form">
+                {{ form_label(form.email, "Email") }}
+                {{ form_widget(form.email, { 'attr': {'class': ' form-all title-block'} }) }}
+            </div>
+            <div class="form">
+                {{ form_label(form.subject, "Sujet") }}
+                {{ form_widget(form.subject, { 'attr': {'class': ' form-all title-block'} }) }}
+            </div>
+            <div class="form">
+                {{ form_label(form.message, "Message") }}
+                {{ form_widget(form.message, { 'attr': {'class': ' form-all title-block'} }) }}
+            </div>
+            <div class="valider">
+                {{ form_label(form.Valider) }}
+                {{ form_widget(form.Valider, { 'attr': {'class': 'button-valider'} }) }}
+            </div>
+        {{ form_end(form) }}
+        <div id="matomo-opt-out" class="matomo-contact"></div>
+        <script src="http://localhost/matomo/index.php?module=CoreAdminHome&action=optOutJS&divId=matomo-opt-out&language=auto&backgroundColor=a5abd5&fontColor=000000&fontSize=15px&fontFamily=roboto&showIntro=1"></script>
+    </div>
+{% endblock %}

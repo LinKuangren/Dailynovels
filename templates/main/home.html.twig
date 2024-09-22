@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+{% block meta_description %}Page d'accueil du site{% endblock %}
+
+{% block body %}
+    <div>
+        <h1>Annonces</h1>
+        <div class="annonces-all">
+            {% for annonce in annonces %}
+                {% set class = '' %}
+                {% if loop.first %}
+                    {% set class = 'annonce-top' %}
+                {% elseif loop.last %}
+                    {% set class = 'annonce-bottom' %}
+                {% endif %}
+                {% if loop.index is even %}
+                    {% set color_class = 'annonce-top-color' %}
+                {% else %}
+                    {% set color_class = 'annonce-bottom-color' %}
+                {% endif %}
+                <a href="{{ path('show_annonce', {id: annonce.id}) }}">
+                    <div class="annonces">
+                        <div class="annonces-content {{ class }} {{ color_class }}">
+                            <p>{{ annonce.title }}</p>
+                            <p>{{ annonce.CreatedAt |date('d-m-Y') }}</p>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="last-novels">
+        <div class="last-add-title">  
+            <h1>Derniere Novels</h1>
+            <a class="look-plus" href="{{ path('novels') }}">Voir plus</a>
+        </div>
+        <div class="last-add">
+            {% for novel in novels %}
+                <div>
+                    <div class="images-novels background-color-novel">
+                        <a href="{{ path('show', {title: novel.title}) }}">
+                            <img src="{{ vich_uploader_asset(novel, 'imageFile') }}" alt="{{ novel.imageName }}">
+                        </a>
+                        <div class="last-novel-home">
+                            <h3>
+                                {{ novel.title | slice(0, 20) }}
+                                {% if novel.title | length > 20 %}
+                                    <strong>...</strong>
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div class="last-add-title last-chap"> 
+            <h1>Dernier Chapitres</h1>
+            {#<a class="look-plus" href="">Voir plus</a>#}
+        </div>
+        <div class="last-add-chap">
+            {% for chapitre in chapitres %}
+                    <div class="images-chapitre">
+                        <a href="{{ path('show', {title: chapitre.novels.title}) }}">
+                            <img src="{{ vich_uploader_asset(chapitre.novels, 'imageFile') }}" alt="{{ chapitre.novels.imageName }}">
+                        </a>
+                        <div class="images-chapitre-content">
+                            <a class="chap-h2-home" href="{{ path('show', {title: chapitre.novels.title}) }}"><h2>{{ chapitre.novels.title }}</h2>
+                            </a>
+                            <a class="chap-link-home" href="{{ chapitre.link }}">
+                                <p>{{ chapitre.name }}</p>
+                            </a>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

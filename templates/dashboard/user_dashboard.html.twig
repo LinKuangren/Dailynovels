@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les utilisateurs{% endblock %}
+{% block meta_description %}Page de tout les utilisateurs qui se trouve sur le site.{% endblock %}
+
+{% block body %}
+    <div class="flex-favoris presentation-bouton">
+        <a href="{{ path('all_user') }}" class="boutona profil-boutona">Utilisateurs</a>
+        <a href="{{ path('all_comment') }}" class="boutona profil-boutona" >Commentaires</a>
+    </div>
+    <div class="example-wrapper">
+        <h1>{{ controller_name }}</h1>
+    </div>
+    <div class="">
+        {{ knp_pagination_render(users) }}
+    </div>
+    <div class="all-all">
+        <table>
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Pseudo</th>
+                    <th>Roles</th>
+                    <th>CreatedAt</th>
+                    <th>UpdatedAt</th>
+                    {# <th>Options</th> #}
+                </tr>
+            </thead>
+            {% for user in users %}
+                <tbody>
+                    <tr>
+                        <th>{{ user.email }}</th>
+                        <td>{{ user.pseudo }}</td>
+                        <td>{{ user.roles|join(', ') }}</td>
+                        <td>{{ user.CreatedAt ? user.CreatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ user.UpdatedAt ? user.UpdatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        {# <td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="cta-delit">
+                                    <a href="{{ path('delete_user_admin', {id: user.id}) }}" class="delete" data-confirm="Êtes-vous sûr de vouloir supprimer cette utilisateur ?">Supprimer</a>
+                                </div>
+                            {% endif %}
+                        </td> #}
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="">
+        {{ knp_pagination_render(users) }}
+    </div>
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p id="confirmation-message"></p>
+            <div class="model-button">
+                <button id="cancel-button">Annuler</button>
+                <button id="confirm-button">Confirmer</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

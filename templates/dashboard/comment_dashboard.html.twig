@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les commentaires{% endblock %}
+{% block meta_description %}Page de tout les commentaires qui se trouve sur le site.{% endblock %}
+
+{% block body %}
+    <div class="flex-favoris presentation-bouton">
+        <a href="{{ path('all_user') }}" class="boutona profil-boutona">Utilisateurs</a>
+        <a href="{{ path('all_comment') }}" class="boutona profil-boutona" >Commentaires</a>
+    </div>
+    <div class="example-wrapper">
+        <h1>{{ controller_name }}</h1>
+    </div>
+    <div class="">
+        {{ knp_pagination_render(comments) }}
+    </div>
+    <div class="all-all">
+        <table>
+            <thead>
+                <tr>
+                    <th>Contenu</th>
+                    <th>Novel</th>
+                    <th>CreatedAt</th>
+                    <th>UpdatedAt</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            {% for comment in comments %}
+                <tbody>
+                    <tr>
+                        <th>{{ comment.content |nl2br }}</th>
+                        <td>{{ comment.novels.title }}</td>
+                        <td>{{ comment.CreatedAt ? comment.CreatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ comment.UpdatedAt ? comment.UpdatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="dash_comment">
+                                    <a href="{{ path('delete_comment_admin', {id: comment.id}) }}" class="cta-chap chap-delete" data-confirm="Êtes-vous sûr de vouloir supprimer ce commentaire ?">Supprimer</a>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="">
+        {{ knp_pagination_render(comments) }}
+    </div>
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p id="confirmation-message"></p>
+            <div class="model-button">
+                <button id="cancel-button">Annuler</button>
+                <button id="confirm-button">Confirmer</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

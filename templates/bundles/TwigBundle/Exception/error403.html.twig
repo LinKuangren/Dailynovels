@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur403{% endblock %}
+{% block meta_description %}Oups tu n'a pas le droit d'accéder à cette endroit.{% endblock %}
+
+{% block body %}
+    <div class="erreur404">
+        <h1>403</h1>
+        <p>Oups tu n'a pas le droit d'accéder à cette endroit.</p>
+        <div class="err-bouton">
+            <a class="boutona" href="{{ path('accueil') }}"> <span>Accueil</span></a>
+        </div>
+    </div>
+{% endblock %}

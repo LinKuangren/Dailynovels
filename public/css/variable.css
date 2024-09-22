@@ -1,0 +1,12 @@
+:root{
+    --dark: #15156E;
+    --bluef: #1A1449;
+    --bluec: #A5ABD5;
+    --green: #207C43;
+    --greenc: #60A552;
+    --light: white;
+    --delete: #cc0000;
+    --delete_hover: #ff4747;
+    --edit: #e67e22;
+    --edit_hover: #e6ae22;
+}

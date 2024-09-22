@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tags.name }}{% endblock %}
+{% block meta_description %}Toutes les novels qui sont associés à {{ tags.name }}.{% endblock %}
+
+{% block body %}
+    <h1>Tag : {{ tags.name }}</h1>
+    {% if tags.novels is not empty %}
+        <div class="">
+            {{ knp_pagination_render(novels) }}
+        </div>
+        <div class="all-novels">
+            {% for novel in novels %}
+                <div class="novel-pages">
+                    <div class="images-novels-pages">
+                        <a href="{{ path('show', {title: novel.title}) }}">
+                            <img src="{{ vich_uploader_asset(novel, 'imageFile') }}" alt="{{ novel.imageName }}">
+                        </a>
+                    </div>
+                    <h4>{{novel.title}}</h4>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="">
+            {{ knp_pagination_render(novels) }}
+        </div>
+    {% endif %}
+{% endblock %}

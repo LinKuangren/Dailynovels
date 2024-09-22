@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un chapitre{% endblock %}
+{% block meta_description %}Ajout d'un chapitre sur le site, si tu vois ceci j'ai codé comme de la merde.{% endblock %}
+
+{% block body %}
+    <h1> Ajouter un chapitre</h1>
+        <div class="form-title">
+            {{ form_start(form) }}
+                <div class="form">
+                    {{ form_label(form.name, "Titre") }}
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-all title-block'} }) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.link, "Lien") }}
+                    {{ form_widget(form.link, { 'attr': {'class': 'form-all title-block'} }) }}
+                </div>
+                <div class="form">
+                    {{ form_label(form.novels, "Novel") }}
+                    {{ form_widget(form.novels, { 'attr': {'class': 'form-all title-block'} }) }}
+                </div>
+                <div class="valider">
+                    {{ form_label(form.Valider) }}
+                    {{ form_widget(form.Valider, { 'attr': {'class': 'button-valider'} }) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Classement{% endblock %}
+
+{% block body %}
+    <body class="classement-page">
+        <div class="trier">
+            <h2>Trier par</h2>
+            <div class="trier-choix">
+                <a href="{{ path('classement', {'type': 'favoris'}) }}" class="trier-active {% if type == 'favoris' %}active{% endif %}">Favoris</a>
+                <a href="{{ path('classement', {'type': 'chapitres'}) }}" class="trier-active {% if type == 'chapitres' %}active{% endif %}">Chapitres</a>
+                <a href="{{ path('classement', {'type': 'plus_recents'}) }}" class="trier-active {% if type == 'plus_recents' %}active{% endif %}">Récents</a>
+            </div>
+        </div>
+        <div class="classement-grid classement-body">
+            {{ knp_pagination_render(favoris) }}
+            {% for novel in favoris %}
+                {% if novel.Visibilitie %}
+                    <div class="classement-interligne classement-top">
+                        <div class="classement-image">
+                            <a href="{{ path('show', {title: novel.title}) }}">
+                                <img src="{{ vich_uploader_asset(novel, 'imageFile') }}" alt="{{ novel.imageName }}">
+                            </a>
+                        </div>
+                        <div class="classement-espace">
+                            <div class="classement-top n-classement">
+                                <a href="{{ path('show', {title: novel.title}) }}"><h2>N°{{ loop.index }} {{ novel.title }}</h2></a>
+                                {# notation #}
+                            </div>
+                            <div class="classement-top classement-actu">
+                                <p><i class="fa-solid fa-scroll fontaw"></i>Chapitres: {{ novel.chapitres.count() }}</p>
+                                <p><i class="fa-solid fa-bookmark fontaw"></i>Favoris: {{ novel.favoris.count() }}</p>
+                                <p><i class="fa-solid fa-comment fontaw"></i>Commentaires: {{ novel.comments.count }}</p>
+                            </div>
+                            <div class="classement-top tag-wrap n-classement">
+                                {% for categorie in novel.categories %}
+                                    <a href="{{ path('categories_show', {'name': categorie.name}) }}">
+                                        <p class="catetag">{{ categorie.name }}</p>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            <div class="description">
+                                <p id="description-{{ loop.index }}" class="full-description" style="display: none;">{{ novel.description|nl2br }}</p>
+                                <p id="partial-description-{{ loop.index }}" class="partial-description">{{ novel.description | slice(0, 200) |nl2br }}</p>
+                                {% if novel.description | length > 200 %}
+                                    <a href="#" class="read-more-link" data-description-id="{{ loop.index }}">Suite >></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {{ knp_pagination_render(favoris) }}
+        </div>
+    </body>
+{% endblock %}

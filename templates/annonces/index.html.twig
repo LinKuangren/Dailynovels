@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les annonces{% endblock %}
+{% block meta_description %}Affichage de toutes les annonces qui existe sur le site.{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="example-wrapper">
+        <h1>{{ controller_name }}</h1>
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="presentation-bouton">
+            <div class=d-bouton>
+                <a class="boutona" href="{{ path('annonces_ajout') }}"> <span>Ajouter une annonce</span></a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="">
+        {{ knp_pagination_render(annonces) }}
+    </div>
+    <div class="all-all">
+        {% for annonce in annonces %}
+            <div class="all">
+                <div class="annonce-title">
+                    <a class="link-annonce" href="{{ path('show_annonce', {id: annonce.id}) }}">{{ annonce.title }}</a>
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="cta-delit">
+                        <a href="{{ path('annonces_delete', {id: annonce.id}) }}" class="delete" data-confirm="Êtes-vous sûr de vouloir supprimer cette annonce ?">Supprimer</a>
+                        <a href="{{ path('annonces_modifier', {id: annonce.id}) }}" class="edit">modifier</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="">
+        {{ knp_pagination_render(annonces) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les catégories{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="example-wrapper">
+        <h1>{{ controller_name }}</h1>
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="presentation-bouton">
+            <div class=d-bouton>
+                <a class="boutona" href="{{ path('categories_ajout') }}"> <span>Ajouter une categorie</span></a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="">
+        {{ knp_pagination_render(categories) }}
+    </div>
+    <div class="all-all">
+        {% for categorie in categories %}
+            <div class="all">
+                <a class="categorie_font" href="{{ path('categories_show', {'name': categorie.name}) }}">
+                    <p class="catetag">{{ categorie.name }}</p>
+                </a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="cta-delit">
+                        <a href="{{ path('categories_delete', {id: categorie.id}) }}" class="delete delete:hover" data-confirm="Êtes-vous sûr de vouloir supprimer cette categorie ?">Supprimer</a>
+                        <a href="{{ path('categories_modifier', {id: categorie.id}) }}" class="edit edit:hover">modifier</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p id="confirmation-message"></p>
+            <div class="model-button">
+                <button id="cancel-button">Annuler</button>
+                <button id="confirm-button">Confirmer</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Scraping{% endblock %}
+
+{% block body %}
+    <h1>Page de Scraping</h1>
+
+    {# Afficher les messages flash #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <form method="post" action="{{ path('app_scrape_run') }}">
+        <button type="submit" class="btn btn-primary">Lancer le Scrapping</button>
+    </form>
+
+    <!-- Afficher la sortie de la commande -->
+    {% if app.session.flashBag.has('success') %}
+        <div class="result">
+            {% for message in app.session.flashBag.get('success') %}
+                {{ message|raw }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <style>
+        /* Ajoutez ici vos styles CSS si nécessaire */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap; /* Maintenir les espaces et les retours à la ligne */
+        }
+    </style>
+{% endblock %}
